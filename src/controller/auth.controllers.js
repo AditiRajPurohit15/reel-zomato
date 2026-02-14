@@ -58,9 +58,14 @@ const loginController = async(req,res)=>{
         let token = user.generateToken();
         res.cookie("token",token);
 
+        const userObj = user.toObject();
+        delete userObj.password;
+
         return res.status(200).json({
             message: "user logged in successfully!",
-            user: user,
+            user: userObj,
+            token,
+            role: "user"
         })
     } catch (error) {
         return res.status(500).json({
@@ -85,16 +90,19 @@ const logoutController = async(req,res)=>{
 
 const registerFoodPartnerController = async(req,res)=>{
 try {
-    let {name, email, password} = req.body;
-    let existingFoodPArtner =await foodPartnerModel.findOne({email});
-    if(existingFoodPArtner){
+    let {BusinessName,contactName,phone,address, email, password} = req.body;
+    let existingFoodPartner =await foodPartnerModel.findOne({email});
+    if(existingFoodPartner){
         return res.status(422).json({
             message: 'food Partner already exists!'
         })
     }
     
     let newFoodPartner =await foodPartnerModel.create({
-        name,
+        BusinessName,
+        contactName,
+        phone,
+        address,
         email,
         password,
     })
@@ -140,9 +148,14 @@ const loginFoodPartnerCOntroller =  async(req,res)=>{
         let token = foodPartner.generateToken();
         res.cookie("token",token);
 
+        const foodPartnerObj = foodPartner.toObject();
+        delete foodPartnerObj.password;
+
         return res.status(200).json({
             message: "Food Partner logged in successfully!",
-            foodPArtner: foodPartner,
+            user: foodPartnerObj,
+            token,
+            role: "partner"
         })
     } catch (error) {
         return res.status(500).json({
