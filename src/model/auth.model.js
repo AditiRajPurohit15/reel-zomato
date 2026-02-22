@@ -35,7 +35,7 @@ userSchema.methods.comparePass =async function(password){
 
 userSchema.methods.generateToken =function(){
    
-let token = jwt.sign({id:this._id},process.env.JWT_SECRET,{expiresIn: '1d'});
+let token = jwt.sign({id:this._id, role: "user"},process.env.JWT_SECRET,{expiresIn: '1d'});
 return token;
 }
 

@@ -20,10 +20,14 @@ try {
     
     let token = newUser.generateToken();
     res.cookie("token", token);
+    const userObj = newUser.toObject();
+    delete userObj.password;
 
     return res.status(201).json({
         message: "new user created successfully!",
-        user: newUser,
+        user: userObj,
+        token,
+        role: "user"
     })
 
 
@@ -90,7 +94,7 @@ const logoutController = async(req,res)=>{
 
 const registerFoodPartnerController = async(req,res)=>{
 try {
-    let {BusinessName,contactName,phone,address, email, password} = req.body;
+    let {businessName,contactName,phone,address, email, password} = req.body;
     let existingFoodPartner =await foodPartnerModel.findOne({email});
     if(existingFoodPartner){
         return res.status(422).json({
@@ -99,7 +103,7 @@ try {
     }
     
     let newFoodPartner =await foodPartnerModel.create({
-        BusinessName,
+        businessName,
         contactName,
         phone,
         address,
@@ -111,9 +115,14 @@ try {
     let token = newFoodPartner.generateToken();
     res.cookie("token", token);
 
+    const foodPartnerObj = newFoodPartner.toObject();
+    delete foodPartnerObj.password;
+
     return res.status(201).json({
         message: "new food partner created successfully!",
-        foodPartner: newFoodPartner,
+        foodPartner: foodPartnerObj,
+        token,
+        role: "partner",
     })
 
 

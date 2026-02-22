@@ -9,7 +9,7 @@ const {registerController,
 
 const router = express.Router();
 
-// user auth APIs
+// user auth APIs 
 router.post('/register', registerController);
 router.post("/login", loginController);
 router.get('/logout', logoutController);

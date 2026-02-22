@@ -13,6 +13,18 @@ const getCurrentUser = async(req,res)=>{
     }
 }
 
+// const getCurrentUser = async (req,res)=>{
+
+//    if(req.role === "user"){
+//        return res.json({ user: req.user });
+//    }
+
+//    if(req.role === "partner"){
+//        return res.json({ user: req.foodPartner });
+//    }
+
+// }
+
 module.exports = {
     getCurrentUser,
 }

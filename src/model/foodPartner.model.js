@@ -3,7 +3,7 @@ const bcryptjs = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 
 const foodPartnerSchema = new mongoose.Schema({
-    BusinessName:{
+    businessName:{
         type: String,
         required:true,
     },
@@ -45,7 +45,7 @@ foodPartnerSchema.methods.comparePass = async function(password){
 }
 
 foodPartnerSchema.methods.generateToken = function(){
-    let token = jwt.sign({id:this._id}, process.env.JWT_SECRET,{expiresIn:'1d'});
+    let token = jwt.sign({id:this._id, role: "partner"}, process.env.JWT_SECRET,{expiresIn:'1d'});
     return token;
 }
 
