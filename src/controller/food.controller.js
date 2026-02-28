@@ -47,7 +47,7 @@ async function getFoodItem(req,res){
 async function likeFood(req,res){
     try {
         const {foodId} = req.body;
-        const user= req.user;
+        const user= req.user; 
 
         const isAlreadyLiked = await likeModel.findOne({
             user: user._id,
@@ -87,4 +87,5 @@ async function likeFood(req,res){
 module.exports = {
     createFood,
     getFoodItem,
+    likeFood
 }
