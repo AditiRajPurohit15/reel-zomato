@@ -29,12 +29,27 @@ async function createFood(req,res){
     }
 }
 
-async function getFoodItem(req,res){
+async function getFoodItem(req,res){ 
     try {
-        const foodItem = await foodModel.find({})
-        res.status(200).json({
+        console.log(req.user);
+        let currentUser = req.user;
+        const foods = await foodModel.find({});
+        const foodIds = foods.map(food=>food._id);
+        
+        const likes = await likeModel.find({
+            food: {$in : foodIds},
+            user: currentUser._id
+        })
+        
+        const likedFoodIds = new Set(likes.map(like=>like.food.toString()));
+        
+        const foodsWithLikes = foods.map(food=>({
+            ...food._doc,
+            isLiked:likedFoodIds.has(food._id.toString())
+        }))
+        return res.status(200).json({
         message: "Food items fetched successfully",
-        foodItem
+        foods: foodsWithLikes
     })
     } catch (error) {
         res.status(400).json({
