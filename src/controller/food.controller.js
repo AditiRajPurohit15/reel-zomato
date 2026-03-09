@@ -16,13 +16,13 @@ async function createFood(req,res){
         foodPartner:req.foodPartner._id
        })
 
-        res.status(201).json({
+        return res.status(201).json({
         message: "food created successfully",
         food: foodItem
     })
 
     } catch (error) {
-        res.status(400).json({
+        return res.status(400).json({
             message: "error in creating food item",
             error: error
         })
@@ -52,7 +52,7 @@ async function getFoodItem(req,res){
         foods: foodsWithLikes
     })
     } catch (error) {
-        res.status(400).json({
+        return res.status(400).json({
             message: "error in fetching food items",
             error: error
         })
