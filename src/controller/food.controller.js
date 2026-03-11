@@ -32,7 +32,6 @@ async function createFood(req,res){
 
 async function getFoodItem(req,res){ 
     try {
-        console.log(req.user);
         let currentUser = req.user;
         const foods = await foodModel.find({});
         const foodIds = foods.map(food=>food._id);
