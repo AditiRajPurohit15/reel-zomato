@@ -187,6 +187,29 @@ const logoutFoodPartnerController = async(req,res)=>{
     }
 }
 
+const getFoodPartnerController = async(req,res)=>{
+    try {
+        let {foodPartnerId} = req.body;
+        console.log(req.body)
+        const foodPartner = await foodPartnerModel.findById(foodPartnerId)
+        console.log(foodPartner)
+        if(!foodPartner){
+            return res.status(404).json({
+                message:"food Partner not found"
+            })
+        }
+        return res.status(200).json({
+            message: 'food partner found',
+            foodPartner,
+            name: foodPartner.contactName,
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: "error in getting food partner"
+        })
+    }
+}
+
 
 
 module.exports = {
@@ -196,4 +219,5 @@ module.exports = {
     registerFoodPartnerController,
     loginFoodPartnerCOntroller,
     logoutFoodPartnerController,
+    getFoodPartnerController
 }
