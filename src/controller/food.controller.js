@@ -35,18 +35,33 @@ async function getFoodItem(req,res){
         let currentUser = req.user;
         const foods = await foodModel.find({});
         const foodIds = foods.map(food=>food._id);
+        const foodPartnerId = foods.map(food=>food.foodPartner);
         
         const likes = await likeModel.find({
             food: {$in : foodIds},
             user: currentUser._id
         })
+        const saves = await saveModel.find({
+            food: {$in: foodIds},
+            user: currentUser._id
+        })
+        const foodPartners = await foodPartnerModel.find({
+            _id:{$in: foodPartnerId},
+            
+        })
         
         const likedFoodIds = new Set(likes.map(like=>like.food.toString()));
+        const savedFoodIds = new Set(saves.map(save=>save.food.toString()));
+        const partnerMap = new Map(foodPartners.map(partner=>[partner._id.toString(), partner.contactName]))
+       
         
         const foodsWithLikes = foods.map(food=>({
             ...food._doc,
-            isLiked:likedFoodIds.has(food._id.toString())
+            isLiked:likedFoodIds.has(food._id.toString()),
+            isSaved:savedFoodIds.has(food._id.toString()),
+            foodPartnerNamee: partnerMap.get(food.foodPartner.toString())
         }))
+
         return res.status(200).json({
         message: "Food items fetched successfully",
         foods: foodsWithLikes
