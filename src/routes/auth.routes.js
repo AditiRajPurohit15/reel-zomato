@@ -5,6 +5,7 @@ const {registerController,
     registerFoodPartnerController,
     loginFoodPartnerCOntroller,
     logoutFoodPartnerController,
+    getFoodPartnerController
 } = require('../controller/auth.controllers')
 
 const router = express.Router();
@@ -18,6 +19,7 @@ router.get('/logout', logoutController);
 router.post('/food-partner/register', registerFoodPartnerController);
 router.post("/food-partner/login", loginFoodPartnerCOntroller);
 router.get('/food-partner/logout', logoutFoodPartnerController);
+router.post('/food-partner/get',getFoodPartnerController);
 
 
 module.exports = router;
