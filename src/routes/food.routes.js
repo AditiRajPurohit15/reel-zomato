@@ -1,6 +1,6 @@
 const express = require('express');
 const {authFoodPartnerMiddleware, authUserMiddleware} = require('../middleware/auth.middleware')
-const {createFood, getFoodItem, likeFood, saveFood, getFoodForPartner} = require('../controller/food.controller')
+const {createFood, getFoodItem, likeFood, saveFood, getFoodForPartner, deleteFood} = require('../controller/food.controller')
 const router = express.Router();
 const multer = require ('multer');
 
@@ -14,5 +14,6 @@ router.get('/', authUserMiddleware, getFoodItem)
 router.post('/like',authUserMiddleware ,likeFood)
 router.post('/save',authUserMiddleware,saveFood)
 router.get('/getFood',authFoodPartnerMiddleware,getFoodForPartner);
+router.delete('/:id',authFoodPartnerMiddleware,deleteFood)
 
 module.exports = router;

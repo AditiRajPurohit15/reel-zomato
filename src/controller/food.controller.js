@@ -170,10 +170,31 @@ try {
 }
 }
 
+async function deleteFood(req,res){
+    try {
+        let foodId = req.params.id;
+        const deletedFood = await foodModel.findByIdAndDelete({
+            _id: foodId,
+            foodPartner: req.foodPartner._id
+        });
+        if(!deletedFood){
+            return res.status(404).json({
+                message: "food not found or not authorized"
+            });
+        }
+        return res.status(200).json({message:"food deleted successfully"})
+    } catch (error) {
+        return res.status(500).json({
+            message: "error in deleting food"
+        })
+    }
+}
+
 module.exports = {
     createFood,
     getFoodItem,
     likeFood,
     saveFood,
-    getFoodForPartner
+    getFoodForPartner,
+    deleteFood
 }
