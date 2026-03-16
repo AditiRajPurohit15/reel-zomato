@@ -153,9 +153,27 @@ async function saveFood(req,res){
     }
 }
 
+async function getFoodForPartner(req,res){
+try {
+    let partnerId = req.foodPartner._id;
+    const foodPartnerFeed = await foodModel.find({
+        foodPartner: partnerId
+    })
+    return res.status(200).json({
+        message: "get food feed by food Partner api called",
+        foodPartnerFeed
+    })
+} catch (error) {
+    return res.status(500).json({
+        message: "error in get food by food Partner api",
+    })
+}
+}
+
 module.exports = {
     createFood,
     getFoodItem,
     likeFood,
-    saveFood
+    saveFood,
+    getFoodForPartner
 }
