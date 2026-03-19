@@ -190,11 +190,54 @@ async function deleteFood(req,res){
     }
 }
 
+async function getSavedFoodForUser(req, res) {
+    try {
+        let user = req.user;
+
+        let foods = await saveModel.find({
+            user: user._id
+        });
+
+        if (foods.length === 0) {
+            return res.status(404).json({
+                message: "No saved food found for this user",
+                foods: []
+            });
+        }
+
+        const foodIds = foods.map(f => f.food);
+
+        const savedFood = await foodModel.find({
+            _id: { $in: foodIds }
+        }).select("name video description likeCount savesCount");
+
+        // maintain order
+        const foodMap = new Map();
+        savedFood.forEach(food => {
+            foodMap.set(food._id.toString(), food);
+        });
+
+        const orderedFoods = foodIds.map(id => foodMap.get(id.toString()));
+
+        return res.status(200).json({
+            message: "saved food fetched for user",
+            foods: orderedFoods
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            message: "error in fetching users' saved food",
+            error: error.message
+        });
+    }
+}
+
 module.exports = {
     createFood,
     getFoodItem,
     likeFood,
     saveFood,
     getFoodForPartner,
-    deleteFood
+    deleteFood,
+    getSavedFoodForUser
 }
