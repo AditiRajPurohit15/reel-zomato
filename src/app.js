@@ -7,7 +7,7 @@ const meRoute = require('./routes/me.routes');
 
 const app = express();
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: "https://reel-zomato-client-7i7g.vercel.app/",
   credentials: true,
 }));
 app.use(express.json());
