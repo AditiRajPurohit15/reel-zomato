@@ -217,7 +217,7 @@ async function getSavedFoodForUser(req, res) {
             foodMap.set(food._id.toString(), food);
         });
 
-        const orderedFoods = foodIds.map(id => foodMap.get(id.toString()));
+        const orderedFoods = foodIds.map(id => foodMap.get(id.toString())).filter(Boolean);
 
         return res.status(200).json({
             message: "saved food fetched for user",
