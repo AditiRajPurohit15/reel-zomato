@@ -6,8 +6,20 @@ const foodRoutes = require('./routes/food.routes');
 const meRoute = require('./routes/me.routes');
 
 const app = express();
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://reel-zomato-client.vercel.app",
+  "https://reel-zomato-client-7i7g.vercel.app"
+];
+
 app.use(cors({
-  origin: "https://reel-zomato-client-7i7g.vercel.app",
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
 }));
 app.use(express.json());
