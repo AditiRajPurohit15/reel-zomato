@@ -19,7 +19,11 @@ try {
     
     
     let token = newUser.generateToken();
-    res.cookie("token", token);
+    res.cookie("token", token, {
+        httpOnly: true,
+        secure: true,        // REQUIRED on production (HTTPS)
+        sameSite: "None",    // VERY IMPORTANT for cross-origin
+        });
     const userObj = newUser.toObject();
     delete userObj.password;
 
@@ -117,7 +121,11 @@ try {
     
     
     let token = newFoodPartner.generateToken();
-    res.cookie("token", token);
+    res.cookie("token", token, {
+        httpOnly: true,
+        secure: true,        // REQUIRED on production (HTTPS)
+        sameSite: "None",    // VERY IMPORTANT for cross-origin
+        });
 
     const foodPartnerObj = newFoodPartner.toObject();
     delete foodPartnerObj.password;
@@ -159,7 +167,11 @@ const loginFoodPartnerCOntroller =  async(req,res)=>{
             })
         }
         let token = foodPartner.generateToken();
-        res.cookie("token",token);
+        res.cookie("token", token, {
+        httpOnly: true,
+        secure: true,        // REQUIRED on production (HTTPS)
+        sameSite: "None",    // VERY IMPORTANT for cross-origin
+        });
 
         const foodPartnerObj = foodPartner.toObject();
         delete foodPartnerObj.password;
