@@ -14,7 +14,7 @@ async function authFoodPartnerMiddleware(req,res,next){
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const foodPartner = await foodPartnerModel.findById(decoded.id);
         if(!foodPartner){
-            return res.status(500).json({
+            return res.status(401).json({
                 message:"unauthorized"
             })
         }
@@ -39,7 +39,7 @@ async function authUserMiddleware(req,res,next){
         const user = await userModel.findById(decoded.id)
         // console.log("bhai food partner ko mat jaane de")
         if(!user){
-            return res.status(500).json({
+            return res.status(401).json({
                 message: "unauthorized"
             })
         }
