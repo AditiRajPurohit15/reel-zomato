@@ -88,8 +88,43 @@ try {
 }
 }
 
+async function replyToComment(req,res){
+    try {
+        const parent = await commentModel.findById(req.params.commentId);
+        if(!parent){
+            return res.status(404).json({
+                message:"parent not found"
+            })
+        }
+        let text = req.body.text;
+        if(!text || !text.trim()){
+        return res.status(400).json({
+            message: "there is nothing to comment!"
+        })
+        }
+        text=text.trim();
+        const reply = await commentModel.create({
+            text,
+            user:req.user._id,
+            food:parent.food,
+            parentComment:parent._id,
+        })
+        return res.status(201).json({
+            message:"reply created successfully",
+            reply
+        })
+        
+    } catch (error) {
+        return res.status(500).json({
+            message: "error in creating reply",
+            error: error.message
+        })
+    }
+}
+
 module.exports ={
     postComment,
     getComment,
-    deleteComment
+    deleteComment,
+    replyToComment
 }
