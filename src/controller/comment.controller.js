@@ -56,7 +56,7 @@ try {
     })
 } catch (error) {
     return res.status(500).json({
-            message: "error in creating comment",
+            message: "error in getting comment",
             error: error.message
         })
 }
@@ -122,9 +122,33 @@ async function replyToComment(req,res){
     }
 }
 
+async function getReplies(req,res){
+try {
+    const parent = await commentModel.findById(req.params.commentId);
+    if(!parent){
+        return res.status(404).json({
+            message: "parent comment not found!"
+        })
+    }
+    const replies = await commentModel.find({
+        parentComment:parent._id
+    }).populate("user","fullName");
+    return res.status(200).json({
+        message: "replies fetched!",
+        replies
+    })
+} catch (error) {
+    return res.status(500).json({
+            message: "error in getting replies",
+            error: error.message
+        })
+}
+}
+
 module.exports ={
     postComment,
     getComment,
     deleteComment,
-    replyToComment
+    replyToComment,
+    getReplies
 }
