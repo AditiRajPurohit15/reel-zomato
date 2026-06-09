@@ -75,6 +75,11 @@ try {
             message:"you are not authorized to delete this comment!"
         })
     }
+    if(!comment.parentComment){
+        await commentModel.deleteMany({
+            parentComment: comment._id
+        })
+    }
     await commentModel.findByIdAndDelete(req.params.commentId);
     return res.status(200).json({
         message:"comment deleted successfully",
