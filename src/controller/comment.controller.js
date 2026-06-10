@@ -25,6 +25,10 @@ try {
         food : req.params.foodId,
         parentComment: null
     })
+    
+    await foodModel.findByIdAndUpdate(foodId,{
+        $inc: {commentsCount: 1}
+    })
     return res.status(201).json({
         message: "comment created successfully",
         comment
@@ -76,9 +80,26 @@ try {
         })
     }
     if(!comment.parentComment){
+        const replies = await commentModel.find({
+        parentComment: comment._id
+        });
+
+        await foodModel.findByIdAndUpdate(
+            comment.food,
+            {
+                $inc: {commentsCount:-(replies.length+1)}
+            }
+        )
+
         await commentModel.deleteMany({
             parentComment: comment._id
         })
+
+    }else {
+        await foodModel.findByIdAndUpdate(
+            comment.food,
+            {$inc : {commentsCount:-1}}
+        )
     }
     await commentModel.findByIdAndDelete(req.params.commentId);
     return res.status(200).json({
@@ -114,6 +135,9 @@ async function replyToComment(req,res){
             food:parent.food,
             parentComment:parent._id,
         })
+        await foodModel.findByIdAndUpdate(parent.food,{
+        $inc: {commentsCount: 1}
+    })
         return res.status(201).json({
             message:"reply created successfully",
             reply
