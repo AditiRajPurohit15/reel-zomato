@@ -1,5 +1,6 @@
 const userModel = require('../model/auth.model');
-const foodPartnerModel = require('../model/foodPartner.model')
+const foodPartnerModel = require('../model/foodPartner.model');
+const { OAuth2Client } = require("google-auth-library");
 
 const registerController = async(req,res)=>{
 try {
@@ -226,6 +227,67 @@ const getFoodPartnerController = async(req,res)=>{
     }
 }
 
+const googleLoginController = async(req,res)=>{
+try {
+    const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+    const {credential} = req.body;
+
+    if (!credential) {
+    return res.status(400).json({
+        message: "Credential is required",
+    });
+}
+
+    const ticket = await client.verifyIdToken({
+        idToken:credential,
+        audience:process.env.GOOGLE_CLIENT_ID,
+    })
+
+    const payload = ticket.getPayload();
+
+    const {email, name, picture, sub} = payload;
+
+    const existingUser = await userModel.findOne({email})
+
+    let user = existingUser
+    if(!user){
+        user = await userModel.create({
+            fullName : name,
+            email,
+            provider:"google",
+            googleId:sub,
+            avatar:picture
+        })
+    }
+    
+    const token = user.generateToken();
+
+    res.cookie("token", token, {
+        httpOnly: true,
+        secure: true,        // REQUIRED on production (HTTPS)
+        sameSite: "None",    // VERY IMPORTANT for cross-origin
+        });
+
+    const userObj = user.toObject();
+
+    delete userObj.password
+
+        return res.status(200).json({
+            message:"Google login Successful",
+            user:userObj,
+            token,
+            role:"user"
+        })
+    
+} catch (error) {
+    return res.status(500).json({
+            message: "error in google login",
+            error:error.message
+        })
+}
+}
+
 
 
 module.exports = {
@@ -235,5 +297,6 @@ module.exports = {
     registerFoodPartnerController,
     loginFoodPartnerCOntroller,
     logoutFoodPartnerController,
-    getFoodPartnerController
+    getFoodPartnerController,
+    googleLoginController
 }

@@ -5,7 +5,8 @@ const {registerController,
     registerFoodPartnerController,
     loginFoodPartnerCOntroller,
     logoutFoodPartnerController,
-    getFoodPartnerController
+    getFoodPartnerController,
+    googleLoginController
 } = require('../controller/auth.controllers')
 
 const router = express.Router();
@@ -20,6 +21,9 @@ router.post('/food-partner/register', registerFoodPartnerController);
 router.post("/food-partner/login", loginFoodPartnerCOntroller);
 router.get('/food-partner/logout', logoutFoodPartnerController);
 router.post('/food-partner/get',getFoodPartnerController);
+
+//oauth
+router.post("/google", googleLoginController);
 
 
 module.exports = router;
