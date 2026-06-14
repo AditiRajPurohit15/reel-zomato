@@ -6,7 +6,7 @@ This repository contains the **backend** of **Reel Zomato**, built using **Node.
 
 ## 🌐 Links
 
-**Frontend Repository:** (https://reel-zomato-client-abfc.vercel.app/login)
+**Frontend Repository:**(https://github.com/AditiRajPurohit15/reel-zomato-client)
 **Frontend Demo:** (https://reel-zomato-client-abfc.vercel.app/login)
 
 **Backend API:** (https://reel-zomato-1.onrender.com)
